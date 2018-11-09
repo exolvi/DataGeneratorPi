@@ -2,11 +2,83 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:xt="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DataGeneratorPi"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Data Generator for PI" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
-        
+        <TabControl>
+            <TabItem Header="PI Connection">                
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="PI Server" />
+                    <ComboBox x:Name="cmbServers" Width="200" HorizontalAlignment="Left" DisplayMemberPath="Name" SelectionChanged="cmbServers_SelectionChanged" />                    
+                    <TextBlock Text="AF Database" />
+                    <ComboBox x:Name="cmbDatabases" Width="200" HorizontalAlignment="Left" DisplayMemberPath="Name" />
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Search">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Attribute Name:" />
+                        <TextBox x:Name="txtAttributeSearch" Width="200" />
+                        <Button x:Name="btnSearch" Content="Search" Click="btnSearch_Click" />
+                    </StackPanel>
+                    <DataGrid x:Name="dgSearchResults" Grid.Row="1" IsReadOnly="True" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Element Name" Binding="{Binding Path=ElementName}" />
+                            <DataGridTextColumn Header="Attribute Name" Binding="{Binding Path=AttributeName}" />
+                            <DataGridTextColumn Header="Data Type" Binding="{Binding Path=DataType}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Generate Data">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Element Name: " />
+                        <TextBlock Text="{Binding SelectedItem.ElementName, ElementName=dgSearchResults}" />
+                        <TextBlock Text="Attribute Name: " />
+                        <TextBlock Text="{Binding SelectedItem.AttributeName, ElementName=dgSearchResults}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1">
+                        <TextBlock Text="Date/Time Range: " />
+                        <xt:DateTimePicker x:Name="dtStart" Width="200"/>
+                        <TextBlock Text="  -  " />
+                        <xt:DateTimePicker x:Name="dtEnd" Width="200"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2">
+                        <TextBlock Text="Frequency" />
+                        <xt:IntegerUpDown x:Name="udFrequency" Value="15" />
+                        <ComboBox x:Name="cmbFrequencyUnit" SelectedIndex="0">
+                            <ComboBoxItem Content="Minutes"/>
+                            <ComboBoxItem Content="Hours"/>
+                            <ComboBoxItem Content="Seconds"/>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="3">
+                        <TextBlock Text="Min" />
+                        <xt:DoubleUpDown x:Name="udMin" />
+                        <TextBlock Text="Max" />
+                        <xt:DoubleUpDown x:Name="udMax" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="4">
+                        <Button x:Name="btnGenerate" Content="Generate" Margin="0,4,0,0" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

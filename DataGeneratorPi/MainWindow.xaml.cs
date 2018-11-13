@@ -13,7 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using OSIsoft.AF;
+using OSIsoft.AF.Asset;
 using OSIsoft.AF.Search;
+using OSIsoft.AF.Time;
 
 namespace DataGeneratorPi
 {
@@ -75,6 +77,40 @@ namespace DataGeneratorPi
 
                     dgSearchResults.ItemsSource = res.ToList();
                 }
+            }
+        }
+
+        private void btnGenerate_Click(object sender, RoutedEventArgs e)
+        {
+            if (dgSearchResults.SelectedIndex >= 0 &&
+                dtStart.Value.HasValue &&
+                dtEnd.Value.HasValue)
+            {
+                var attr = (SearchResult)dgSearchResults.SelectedItem;
+                var dtIter = dtStart.Value.Value;
+                var values = new AFValues();
+                var r = new Random(DateTime.Now.Millisecond);
+                while (dtIter <= dtEnd.Value)
+                {
+                    var val = (r.NextDouble() * (udMax.Value.Value - udMin.Value.Value)) + udMin.Value.Value;
+
+                    values.Add(new AFValue(val, new AFTime(dtIter)));
+
+                    if ((string)cmbFrequencyUnit.SelectionBoxItem == "Minutes")
+                    {
+                        dtIter = dtIter.AddMinutes(udFrequency.Value.Value);
+                    }
+                    else if ((string)cmbFrequencyUnit.SelectionBoxItem == "Hours")
+                    {
+                        dtIter = dtIter.AddHours(udFrequency.Value.Value);
+                    }
+                    else if ((string)cmbFrequencyUnit.SelectionBoxItem == "Seconds")
+                    {
+                        dtIter = dtIter.AddSeconds(udFrequency.Value.Value);
+                    }
+                }
+
+                attr._self.Data.UpdateValues(values, OSIsoft.AF.Data.AFUpdateOption.Replace);
             }
         }
     }

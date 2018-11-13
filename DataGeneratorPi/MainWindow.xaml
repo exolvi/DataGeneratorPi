@@ -70,12 +70,12 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="3">
                         <TextBlock Text="Min" />
-                        <xt:DoubleUpDown x:Name="udMin" />
+                        <xt:DoubleUpDown x:Name="udMin" Value="0" />
                         <TextBlock Text="Max" />
-                        <xt:DoubleUpDown x:Name="udMax" />
+                        <xt:DoubleUpDown x:Name="udMax" Value="1" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="4">
-                        <Button x:Name="btnGenerate" Content="Generate" Margin="0,4,0,0" />
+                        <Button x:Name="btnGenerate" Content="Generate" Margin="0,4,0,0" Click="btnGenerate_Click" />
                     </StackPanel>
                 </Grid>
             </TabItem>
